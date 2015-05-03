@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<title>React Scratch</title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+	</head>
+	<body>
+		<div id = "app"></div>
+		<script src = "../build/react.min.js"></script>
+		<script src = "../build/JSXTransformer.js"></script>
+		<script type="text/jsx">
+			/** @jsx React.DOM */
+			var MessageBox = React.createClass({
+				getInitialState: function(){
+					return {
+						isVisible : true,
+						titleMessage: "hello, world",
+						messages: [
+							"I like to move it",
+							"Office has colleagues not friends",
+							"When will the winter come ?",
+							"Waiting for the weekend on a weekend"
+						]
+					}
+				},
+				handleAdd: function(e){
+					var newMessage = this.refs.newMessage.getDOMNode().value;
+					var newMessages = this.state.messages.concat([newMessage]);
+
+					this.setState({
+						messages: newMessages
+					});
+				},
+				render: function(){
+					var inlineStyles = {
+						display: this.state.isVisible? "block": "none"
+					};
+
+					var messages = this.state.messages.map(function(message){
+						return <SubMessage message = {message} />
+					});
+
+					return (
+						<div className = "container jumbotron" style = {inlineStyles}>
+							<input type ="text" ref = "newMessage" />
+							<button className="btn btn-primary" onClick={this.handleAdd}>Add Message</button>
+							<h1>{this.props.message}</h1>
+
+							{messages}
+						</div>
+					);
+				}
+			});
+
+			var SubMessage = React.createClass({
+				propTypes: {
+					message: React.PropTypes.string.isRequired
+				},
+				getDefaultProps: function(){
+					return {
+						message: "It's good to see you"
+					};
+				},
+				render: function(){
+					return (
+						<h3>{this.props.message}</h3>
+					);
+				}
+			});
+
+			var message = "Yo";
+
+			React.render(<MessageBox message = {message}/>, document.getElementById("app"), function(){
+				console.log("render done");
+			});
+
+		</script>
+	</body>
+</html>
